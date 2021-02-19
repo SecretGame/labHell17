@@ -20,20 +20,63 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
+void importDataFromFile(string filename,vector<string> &name,vector<int> &scores,vector<char> &grades){
+    ifstream source(filename.c_str());
+    string line;
+    vector<string> fulltext;
+    while(getline(source,line))
+    {
+        string text = line;
+        const char * n = text.c_str();
+        char format[] = "%[^:]: %d %d %d";
+        char onlyname[100];
+        int a,b,c;
+        char* G = &grades[0];
+        sscanf(n,format,onlyname,&a,&b,&c,G);
+        name.push_back(onlyname);
+        grades.push_back(score2grade(a+b+c));
+        scores.push_back(a+b+c);
+    }
 
 }
 
-void getCommand(){
-
+void getCommand(string &command,string &key){
+    cout<<"Please input your command: ";
+    getline(cin,command);
+    char command_char[100],input_char[100];
+    char format[] = "%s %[^\n]";
+    sscanf(command.c_str(),format,command_char,input_char);
+    command = command_char;
+    key = input_char;
 }
 
-void searchName(){
-
+void searchName(vector<string> name,vector<int> scores,vector<char> grades,string key){
+    bool found = false;
+    for(unsigned int i=0;i < name.size();i++){
+        if(toUpperStr(name.at(i)) == key)
+        {
+            cout<<"---------------------------------"<<endl;
+            cout<<name.at(i)<<" "<<"score = "<<scores.at(i)<<endl;
+            cout<<name.at(i)<<" "<<"grade = "<<grades.at(i)<<endl;
+            cout<<"---------------------------------"<<endl;
+        found = true;
+        }
+    }
+    if(found == false)
+        {
+        cout<<"---------------------------------"<<endl;
+        cout<<"Cannot found."<<endl;
+        cout<<"---------------------------------"<<endl;
+        }
 }
 
-void searchGrade(){
-
+void searchGrade(vector<string> name,vector<int> scores,vector<char> grades,string key){
+    cout<<"---------------------------------"<<endl;
+    for(unsigned i=0;i < name.size();i++){
+        if(grades.at(i) == key[0])
+        cout<<name.at(i)<<" "<<"("<<scores.at(i)<<")"<<endl;
+    }
+    cout<<"---------------------------------"<<endl;
 }
 
 
